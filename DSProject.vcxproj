@@ -129,6 +129,13 @@
   <ItemGroup>
     <ClCompile Include="DSProject.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="recommender.h" />
+    <ClInclude Include="user.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="users.csv" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
