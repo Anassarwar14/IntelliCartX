@@ -31,5 +31,8 @@
     <None Include="users.csv">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="data\users.csv">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

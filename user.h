@@ -409,7 +409,7 @@ public:
         vector<string> row;
 
         string line, word;
-        fstream file("users.csv", ios::in);
+        fstream file("data\\users.csv", ios::in);
 
         getline(file, line);
         while (getline(file, line)) {
