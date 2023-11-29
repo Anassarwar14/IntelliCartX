@@ -5,19 +5,99 @@
 
 using namespace std;
 
-class RecommenderSystem {
+template <typename T>
+class PriorityQueue {
+    vector<T> heap;
+    int heapSize;
+
+    void heapifyUp(int index) {
+        while (index > 0) {
+            int parent = (index - 1) / 2;
+            if (heap[index] < heap[parent]) {
+                std::swap(heap[index], heap[parent]);
+                index = parent;
+            }
+            else {
+                break;
+            }
+        }
+    }
+
+    void heapifyDown() {
+        int size = heap.size();
+        while (index < size) {
+            int leftChild = 2 * index + 1;
+            int rightChild = 2 * index + 2;
+            int smallest = index;
+
+            if (leftChild < size && heap[leftChild] < heap[smallest])
+                smallest = leftChild;
+
+            if (rightChild < size && heap[rightChild] < heap[smallest])
+                smallest = rightChild;
+
+            if (smallest != index) {
+                swap(heap[index], heap[smallest]);
+                index = smallest;
+            }
+            else {
+                break;
+            }
+        }
+
+    }
 
 public:
+
+    void push(T value) {
+        heap.push_back(value);
+        heapifyUp(heap.size() - 1);
+    }
+
+    T pop() {
+        if (heap.empty()) {
+            throw out_of_range("Priority queue is empty");
+        }
+
+        T root = heap[0];
+        swap(heap[0], heap[heap.size() - 1]);
+        heap.pop_back();
+        heapifyDown();
+        return root;
+    }
+
+    // Return the smallest element (root) without removing it
+    T top() const {
+        if (heap.empty()) {
+            throw out_of_range("Priority queue is empty");
+        }
+        return heap[0];
+    }
+
+    bool empty() const {
+        return heap.empty();
+    }
+
+    size_t size() const {
+        return heap.size();
+    }
+};
+
+
+
+
+class RecommenderSystem {
     vector<double> average;
     vector<User> users;
     vector<Category> categories;
     vecDouble2D userToCategory;
     vecDouble2D train_userToCat;
-    int userSize;
-    int categorySize;
+    int userSize, categorySize;
+    bool trainData;
     static double RMSE_UToU;
     static double RMSE_CToC;
-    bool trainData;
+
+public:
 
     RecommenderSystem(vecDouble2D userToCategory, vector<User>& users, vector<Category>& categories, bool training) {
         this->userToCategory = userToCategory;
@@ -27,18 +107,20 @@ public:
         categorySize = categories.size();
         average.resize(userSize);
         trainData = training;
-        if (training) { //to ca'lculate better recommender
+        if (training) { //to choose better recommender
             train_userToCat = userToCategory;
             CollaborativeFilteringCategoryCategory();
             CollaborativeFilteringUserUser();
         }
         else {
-            switchingHybridRecommend();
+            SwitchingHybridRecommend();
+            cout << endl << RMSE_CToC << " ";
+            cout << RMSE_UToU << endl;
         }
     }
 
 
-    void switchingHybridRecommend() {
+    void SwitchingHybridRecommend() {
         if (RMSE_UToU < RMSE_CToC)
             CollaborativeFilteringUserUser();
         else
@@ -49,6 +131,7 @@ public:
         similarItems();
         predict_CToC();
     }
+
     void CollaborativeFilteringUserUser() {
         getAverage();
         normalizeData();
@@ -102,7 +185,7 @@ public:
                     if (top && bottom) {
                         pred_rating = top / bottom;
 
-                        if (trainData) {
+                        if (trainData && train_userToCat[i][j]) {
                             SquareError += pow(train_userToCat[j][i] - pred_rating, 2);
                             validCount++;
                         }
@@ -196,8 +279,8 @@ public:
 
                     if (top && bottom) {
                         pred_rating = top / bottom;
-                        //RSME - checking efficincy of prediction model
-                        if (trainData) {
+                        //RMSE - checking efficincy of prediction model
+                        if (trainData && train_userToCat[i][j]) {
                             SquareError += pow(train_userToCat[i][j] - (pred_rating + average[i]), 2);
                             validCount++;
                         }
@@ -218,10 +301,61 @@ public:
         }
     }
 
+    void computeRecommendations(User* u) {
+        vector<double> arr;
+        for (int j = userSize; j < userToCategory[0].size(); j++) {
+            arr.push_back(userToCategory[u->getKey()][j]);
+        }
+
+        vector<double> largest_K_Vals = findTopK(arr, 10);
+        vector<Category> recommendations;
+        double threshold = 0;
+        for (int j = userSize, k = 0; j < userToCategory[0].size(); j++) {
+            if (userToCategory[u->getKey()][j] == largest_K_Vals[k] && largest_K_Vals[k] > threshold)
+                recommendations.push_back(categories[k]);
+        }
+        displayRecommendations(recommendations);
+    }
+
+    vector<double> findTopK(const vector<double>& arr, int k) {
+        PriorityQueue<double> minHeap;
+
+        for (int i = 0; i < k; ++i) {
+            minHeap.push(arr[i]);
+        }
+
+        for (int i = k; i < arr.size(); ++i) {
+            if (arr[i] > minHeap.top()) {
+                minHeap.pop();
+                minHeap.push(arr[i]);
+            }
+        }
+
+        vector<double> result;
+        result.reserve(k);
+        while (!minHeap.empty()) {
+            result.push_back(minHeap.top());
+            minHeap.pop();
+        }
+
+        reverse(result.begin(), result.end()); //make descending
+        return result;
+    }
+    
+
+    void displayRecommendations(vector<Category> recommendations){
+        for (int i = 0; i < recommendations.size();) {
+            if (i % 5 == 0) {
+                //display
+                i++;
+            }
+            recommendations[i].products[rand() % recommendations[i].products.size() - 1];
+        }
+    }
+
     vecDouble2D getRecommendedData() {
         return userToCategory;
     }
-
     void displayRelationGraph() {
         for (int i = 0; i < userToCategory.size(); i++) {
             for (int j = 0; j < userToCategory.size(); j++) {
@@ -231,7 +365,6 @@ public:
             cout << endl;
         }
     }
-
 };
 
 double RecommenderSystem::RMSE_UToU = 0;

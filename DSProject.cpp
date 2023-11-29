@@ -12,15 +12,7 @@ int main()
     vector<Category> categories(3);  //categories.csv
     vector<Product> products;        //products.csv
     vector<User> users(3);           //users.csv
-    vecDouble2D userToCategory = {
-        {0, 0, 0, 1, 5, 4},
-        {0, 0, 0, 1, 5, 0},
-        {0, 0, 0, 0, 5, 3},
-        {0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0},
-    };
-
+    
     vecDouble2D userToCategory_trainSet = {
         {0, 0, 0, 1, 5, 4},
         {0, 0, 0, 1, 5, 4},
@@ -29,6 +21,16 @@ int main()
         {0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0},
     };
+    
+    vecDouble2D userToCategory_testSet = {
+        {0, 0, 0, 1, 5, 4},
+        {0, 0, 0, 1, 5, 0},
+        {0, 0, 0, 0, 5, 3},
+        {0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0},
+    };
+
     
     users[0].evaluatedCategory.push_back(true);
     users[0].evaluatedCategory.push_back(true);
@@ -45,7 +47,7 @@ int main()
 
 
     RecommenderSystem testRecommender(userToCategory_trainSet, users, categories, true);
-    RecommenderSystem Recommender(userToCategory, users, categories, false);
+    RecommenderSystem Recommender(userToCategory_testSet, users, categories, false);
 
     Recommender.displayRelationGraph();
 

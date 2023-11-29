@@ -278,7 +278,9 @@ public:
     void set_idPass(string username, string pass) { //for filing
         id = username; password = pass; 
     } 
-
+    int getKey() {
+        return key;
+    }
 
 };
 
@@ -286,23 +288,24 @@ class Category {
 public:
     int key;
     string categoryName;
-    vector<string> keywords;
     string description;
-    vector<double> featureVector; // for similarity between different categories using cosine similarity on both vectors
-    Category(int key, string name, vector<string> keywords, string descrip, vector<double> featureMatrix, bool evaluated) : key(key), categoryName(name),
-        keywords(keywords), description(descrip) {}
+    vector<Product> products;
+    vector<string> keywords;
+    vector<double> featureVector; //for similarity between different categories(content-bsaed filtering)
+    Category(int key, string name, string descrip, vector<Product> products, vector<string> keywords, vector<double> featureMatrix) : key(key), categoryName(name),
+        products(products), keywords(keywords), description(descrip) {}
     Category() {}
 };
 
 
 struct Product {
-    int product_id; //index in orig vector in case products are shuffled
+    int productID; //index in orig vector in case products are shuffled
     string name, category, brand;
     double price, overall_rating;
     int stock;
     int reviewNum;
     vector<string> reviews;
-    Product(int key, string n, double p, string c, string brand, int st) : product_id(key), reviewNum(0), name(n), price(p),
+    Product(int key, string n, double p, string c, string brand, int st) : productID(key), reviewNum(0), name(n), price(p),
         category(c), stock(st), overall_rating(0) {}
 };
 
@@ -417,9 +420,7 @@ public:
             row.clear();
             istringstream ss(line);
             while (getline(ss, word, ',')) {
-
                 row.push_back(word);
-
             }
 
             users.push_back(*new User(stoi(row[0]), row[1], row[2], row[3], row[4], stoi(row[5]), row[6], row[7], row[8]));
@@ -471,9 +472,7 @@ public:
     //        istringstream ss(line);
 
     //        while (getline(ss, word, ',')) {
-
     //            row.push_back(word);
-
     //        }
 
     //        employers[i].set_idPass(row[0], row[1]);

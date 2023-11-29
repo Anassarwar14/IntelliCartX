@@ -28,10 +28,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="users.csv">
+    <None Include="data\users.csv">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="data\users.csv">
+    <None Include="data\categories.csv">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\products.csv">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
