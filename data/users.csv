@@ -1,21 +1,21 @@
 UserID,Username,Password,First Name,Last Name,Age,Email,Phone Number,City,Categories Interacted..,,,,,,,,
-1,anas,anas123,Anas,Sarwar,20,anas@gmail.com,+92 300 492344,Karachi,28,20,6,15,1,3,5,17,20
-2,ali,ali12345,Ali,Khan,28,ali@gmail.com,+92 312 456789,Lahore,23,9,14,27,17,1,8,27,23
+1,anas,anas123,Anas,Sarwar,20,anas@gmail.com,+92 300 492344,Karachi,28,20,6,15,1,,5,17,20
+2,ali,ali12345,Ali,Khan,28,ali@gmail.com,+92 312 456789,Lahore,23,9,,27,,1,8,27,23
 3,maria,maria789,Maria,Gomez,26,maria@gmail.com,+34 93 876 5432,Barcelona,26,14,12,13,5,4,,,
-4,umer,umer987,Umer,Saeed,32,umer@gmail.com,+92 345 667788,Karachi,7,14,5,3,19,12,21,1,27
+4,umer,umer987,Umer,Saeed,32,umer@gmail.com,+92 345 667788,Karachi,7,14,,3,,12,21,1,27
 5,sadia,sadia4321,Sadia,Malik,29,sadia@outlook.com,+92 300 998877,Lahore,8,6,19,23,2,12,15,28,
-6,ahmed,ahmed786,Ahmed,Raza,35,ahmed@yahoo.com,+92 313 344556,Islamabad,21,26,3,8,15,16,18,1,19
+6,ahmed,ahmed786,Ahmed,Raza,35,ahmed@yahoo.com,+92 313 344556,Islamabad,21,26,3,8,15,,18,1,19
 7,saima,saima555,Saima,Akhtar,26,saima@outlook.com,+92 321 555666,Karachi,24,4,15,23,1,14,18,27,28
 8,raheel,raheel999,Raheel,Mehmood,30,raheel@gmail.com,+92 344 222111,Lahore,11,22,7,6,18,14,2,12,4
-9,ayesha,ayesha777,Ayesha,Ahmed,27,ayesha@outlook.com,+92 300 111222,Islamabad,13,22,9,11,6,18,7,15,5
+9,ayesha,ayesha777,Ayesha,Ahmed,27,ayesha@outlook.com,+92 300 111222,Islamabad,13,22,9,,6,18,7,15,5
 10,arthur,arthur111,Arthur,Williams,27,arthur@gmail.com,+44 20 3456 7890,London,5,24,19,20,7,1,12,6,17
 11,kate,kate123,Kate,Anderson,24,kate@gmail.com,+44 20 7123 4567,London,16,12,25,5,21,1,8,3,14
 12,juan,juan567,Juan,Rodriguez,31,juan@yahoo.com,+34 91 234 5678,Madrid,20,4,1,28,14,24,6,9,17
 13,lucia,lucia666,Lucia,Santos,28,lucia@gmail.com,+34 91 567 8901,Madrid,19,1,12,22,28,5,9,16,11
-14,jackson,jackson111,Jackson,Smith,33,jackson@outlook.com,+1 212 555 6789,New York,26,18,4,5,1,7,22,15,19
+14,jackson,jackson111,Jackson,Smith,33,jackson@outlook.com,+1 212 555 6789,New York,26,18,,5,1,7,22,15,19
 15,lina,lina222,Lina,Kumar,22,lina@yahoo.com,+91 80 1234 5678,Bangalore,3,12,7,25,10,14,28,22,4
 16,carlos,carlos333,Carlos,Fernandez,29,carlos@gmail.com,+34 91 345 6789,Madrid,23,6,13,15,1,9,14,26,18
 17,olga,olga444,Olga,Ivanova,27,olga@outlook.com,+7 495 123 45 67,Moscow,7,8,16,5,2,22,28,14,21
 18,samir,samir555,Samir,Ahmed,25,samir@yahoo.com,+92 300 987654,Islamabad,13,19,6,9,27,1,11,25,8
 19,lucia,lucia666,Lucia,Santos,28,lucia@gmail.com,+34 91 567 8901,Madrid,15,5,2,4,14,26,18,10,7
-20,raj,raj777,Raj,Patel,32,raj@outlook.com,+91 22 3456 7890,Mumbai,22,3,7,25,11,8,18,14,1
+20,raj,raj777,Raj,Patel,32,raj@outlook.com,+91 22 3456 7890,Mumbai,22,3,,25,11,,18,14,1

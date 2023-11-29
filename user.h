@@ -284,6 +284,7 @@ public:
 
 };
 
+
 class Category {
 public:
     int key;
@@ -335,8 +336,8 @@ public:
 
 
         //readUserToCategoryGraph();
-        //readUserRecord();
-        //readCategoryRecord();
+        readUserRecord();
+        readCategoryRecord();
         //readProductRecord();
     }
 

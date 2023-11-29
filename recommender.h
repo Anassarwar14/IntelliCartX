@@ -185,12 +185,12 @@ public:
                     if (top && bottom) {
                         pred_rating = top / bottom;
 
-                        if (trainData && train_userToCat[i][j]) {
+                        if (trainData && train_userToCat[j][i]) {
                             SquareError += pow(train_userToCat[j][i] - pred_rating, 2);
                             validCount++;
+                            users[j].evaluatedCategory[c1] = true;
                         }
                         userToCategory[j][i] = pred_rating;
-                        //users[j].evaluatedCategory[c1] = true;
                     }
                 }
             }
@@ -283,10 +283,10 @@ public:
                         if (trainData && train_userToCat[i][j]) {
                             SquareError += pow(train_userToCat[i][j] - (pred_rating + average[i]), 2);
                             validCount++;
+                            users[i].evaluatedCategory[n] = true;
                         }
 
                         userToCategory[i][j] = pred_rating;
-                        //users[i].evaluatedCategory[n] = true;
                     }
                     else {
                         userToCategory[i][j] = pred_rating - average[i];
@@ -301,7 +301,7 @@ public:
         }
     }
 
-    void computeRecommendations(User* u) {
+    void computeTopKRecommendations(User* u) {
         vector<double> arr;
         for (int j = userSize; j < userToCategory[0].size(); j++) {
             arr.push_back(userToCategory[u->getKey()][j]);
