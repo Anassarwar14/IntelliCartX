@@ -136,7 +136,8 @@
   <ItemGroup>
     <None Include="data\categories.csv" />
     <None Include="data\products.csv" />
-    <None Include="data\User Category Relation Graph.csv" />
+    <None Include="data\user category training set.csv" />
+    <None Include="data\User Category Relation Graphs.xlsx" />
     <None Include="data\users.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -37,7 +37,10 @@
     <None Include="data\products.csv">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="data\User Category Relation Graph.csv">
+    <None Include="data\user category training set.csv">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\User Category Relation Graphs.xlsx">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

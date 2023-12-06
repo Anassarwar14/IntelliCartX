@@ -7,52 +7,169 @@ using namespace std;
 //1. Sparsity problem(graph) e.g 1 category interacted
 //2. Zero vector after norm of data (no recommendation for that user) 
 
+
+
 int main()
 {
-    vector<Category> categories(3);  //categories.csv
-    vector<Product> products;        //products.csv
-    vector<User> users(3);           //users.csv
-    
-    vecDouble2D userToCategory_trainSet = {
-        {0, 0, 0, 1, 5, 4},
-        {0, 0, 0, 1, 5, 4},
-        {0, 0, 0, 2, 5, 3},
-        {0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0},
-    };
-    
-    vecDouble2D userToCategory_testSet = {
-        {0, 0, 0, 1, 5, 4},
-        {0, 0, 0, 1, 5, 0},
-        {0, 0, 0, 0, 5, 3},
-        {0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0},
-    };
-
-    
-    users[0].evaluatedCategory.push_back(true);
-    users[0].evaluatedCategory.push_back(true);
-    users[0].evaluatedCategory.push_back(true);
-
-    users[1].evaluatedCategory.push_back(true);
-    users[1].evaluatedCategory.push_back(true);
-    users[1].evaluatedCategory.push_back(false);
-
-    users[2].evaluatedCategory.push_back(false);
-    users[2].evaluatedCategory.push_back(true);
-    users[2].evaluatedCategory.push_back(true);
-
-
-
-    RecommenderSystem testRecommender(userToCategory_trainSet, users, categories, true);
-    RecommenderSystem Recommender(userToCategory_testSet, users, categories, false);
-
-    Recommender.displayRelationGraph();
 
     admin a;
-    a.readUserRecord();
+	vector<User> users;
+	users = a.get_users();
+    vecDouble2D userToCategory_trainSet = a.getGraph();
+    vecDouble2D userToCategory_testSet  = a.getGraph();
+
+
+
+  // RecommenderSystem testRecommender(userToCategory_trainSet, users, categories, true);
+  // RecommenderSystem Recommender(userToCategory_testSet, users, categories, false);
+
+   //Recommender.displayRelationGraph();
+
+
+
+
+   int choice, check1 = 0, i = 0, check2 = 0, count = 0, userSize = 0,  incUsername = 0, getch();
+   User u;
+   string user_name, password;
+   char _end = 'e';
+
+
+   intro();
+
+   do
+   {
+	   system("Color F0");
+	   frame();
+
+	   cout << "Enter from the choice of action:\n\t\t1: Sign up as a User\n\t\t2: Login as a User\n\t\t3: Admin\n\n\t\tPress 4 to exit\t\t";
+	   cin >> choice;
+	   system("cls");
+	   switch (choice)
+	   {
+
+	   case 1:
+		   SetColor(1); cout << "-->Enter User details<--\n" << endl; SetColor(4);
+		   u.user_setter();
+		  // getch();
+
+		   break;
+
+
+	   case 2:
+		   do {
+			   frame();
+			   cout << "-----LOGIN-----\n\n\t\t";
+
+			   a.readUserRecord();
+			   users = a.get_users();
+
+			   cout << "Enter Username: ";
+			   cin >> user_name;
+
+
+
+			   incUsername = 1;
+			   for (i = 0; i < users.size(); i++)
+			   {
+				   if (users[i].get_username() == user_name)
+				   {
+					   count = 0;
+					   incUsername = 0;
+					   do
+					   {
+						   gotoxy(16, 7);
+						   cout << "Enter password: ";
+						   cin >> password;
+
+						   if (users[i].get_password() == password)
+						   {
+							   a.login(&users[i]);
+							   break; //count =3;
+						   }
+						   else
+						   {
+							   gotoxy(10, 16);
+							   SetColor(4);
+							   cout << "Incorrect Password!!\tAttempt: " << count + 1 << "/3" << endl;
+							   SetColor(0);
+							   count++;
+						   }
+					   } while (count < 3);
+					   break;
+				   }
+			   }
+
+			   if (incUsername == 1) {
+				   gotoxy(9, 18); SetColor(4);  cout << "Incorrect Username! Press any key to continue\n\n\n\t ";
+			//	   SetColor(8); cout << "Press 'B' to return"; _end = toupper((int)getch());
+			   }
+
+		   } while (_end != 'B' && incUsername == 1);
+
+		   break;
+
+	   case 3:
+		   do {
+			   frame();
+			   cout << "-----LOGIN-----\n\n\t\t";
+
+
+			   cout << "Enter Username: ";
+			   cin >> user_name;
+
+			   incUsername = 1;
+
+			   if (a.get_username() == user_name)//check
+			   {
+				   count = 0;
+				   incUsername = 0;
+				   do
+				   {
+					   gotoxy(16, 7);
+					   cout << "Enter password: ";
+					   cin >> password;
+
+					   if (a.get_password() == password)
+					   {
+						//   a.login();
+						   break;
+					   }
+					   else
+					   {
+						   gotoxy(10, 16);
+						   SetColor(4);
+						   cout << "Incorrect Password!!\tAttempt: " << count + 1 << "/3" << endl;
+						   SetColor(0);
+						   count++;
+					   }
+				   } while (count < 3);
+				   break;
+			   }
+
+
+			   if (incUsername == 1) {
+				   gotoxy(9, 18); SetColor(4);  cout << "Incorrect Username! Press any key to continue\n\n\n\t ";
+				   //SetColor(8); cout << "Press 'B' to return"; _end = toupper((int) getch());
+			   }
+
+		   } while (_end != 'B' && incUsername == 1);
+
+		   break;
+
+	   case 4://added so it doesnt go to default
+		   break;
+
+	   default:
+		   frame();
+		   SetColor(4);
+		   cout << "Invalid entry! Press any key to continue" << endl;
+		   //getch();
+		   break;
+
+	   }
+   } while (choice != 6);
+
+
 }
 
 /*user category relationship(directed) based on :  1. bought           score: +4           similarity checker: cosine similarity(-1.0 - 1.0)

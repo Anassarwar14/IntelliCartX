@@ -6,8 +6,31 @@
 #include <regex>
 #include <string>
 #include <windows.h>
+#define vecDouble2D vector<vector<double>>
 
 using namespace std;
+
+
+void SetColor(int ForgC)
+{
+    WORD wColor;
+
+    HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+
+    //We use csbi for the wAttributes word.
+    if (GetConsoleScreenBufferInfo(hStdOut, &csbi))
+    {
+        //Mask out all but the background attribute, and add in the forgournd     color
+        wColor = (csbi.wAttributes & 0xF0) + (ForgC & 0x0F);
+        SetConsoleTextAttribute(hStdOut, wColor);
+    }
+    return;
+}
+void gotoxy(short x, short y) {
+    COORD pos = { x, y };
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+}
 
 
 class User {
@@ -282,34 +305,109 @@ public:
         return key;
     }
 
+    string get_username() {
+        return id;
+    }
+
+    string get_password() {
+        return password;
+    }
+
+    string get_first_name() {
+        return first_name;
+    }
+
 };
 
+
+
+struct Product {
+    string productID; //can use int for hashing
+    string name, brand, category;
+    double price;
+    int stock, overall_rating;
+    string categoryBuffer;
+    vector<string> product_categoriesName;
+    Product(string key, string n, string b, string c, double p, int st, int r) : productID(key), name(n), brand(b), categoryBuffer(c),
+        price(p), stock(st), overall_rating(r) {
+        istringstream ss(categoryBuffer);
+        int i = 0;
+        string category;
+        while (getline(ss, category, '|')) {
+            product_categoriesName.push_back(category);
+            i++;
+        }
+    }
+};
 
 class Category {
 public:
     int key;
     string categoryName;
     string description;
-    vector<Product> products;
     vector<string> keywords;
+    string keywordBuffer;
+    vector<Product> products;
     vector<double> featureVector; //for similarity between different categories(content-bsaed filtering)
-    Category(int key, string name, string descrip, vector<Product> products, vector<string> keywords, vector<double> featureMatrix) : key(key), categoryName(name),
-        products(products), keywords(keywords), description(descrip) {}
+    Category(int key, string name, string descrip, string k): key(key), categoryName(name),
+        description(descrip), keywordBuffer(k){
+        istringstream ss(keywordBuffer);
+        int i = 0;
+        string keyword;
+        while (getline(ss, keyword, '|')) {
+            keywords.push_back(keyword);
+            i++;
+        }
+        
+    }
     Category() {}
 };
 
 
-struct Product {
-    int productID; //index in orig vector in case products are shuffled
-    string name, category, brand;
-    double price, overall_rating;
-    int stock;
-    int reviewNum;
-    vector<string> reviews;
-    Product(int key, string n, double p, string c, string brand, int st) : productID(key), reviewNum(0), name(n), price(p),
-        category(c), stock(st), overall_rating(0) {}
-};
+class Graph {
+    double** UserToCategory;
+    int userSize, categorySize;
+public:
+    Graph(int uSize, int cSize): userSize(uSize), categorySize(cSize){
+        UserToCategory = new double*[uSize + cSize];
+        for (int i = 0; i < uSize + cSize; i++) {
+            UserToCategory[i] = new double[uSize + cSize];
+            for (int j = 0; j < uSize + cSize; j++) {
+                UserToCategory[i][j] = 0;
+            }
+        }
+    }
+    ~Graph() {
+        for (int i = 0; i < userSize + categorySize; i++) {
+            delete UserToCategory[i];
+        }
+        delete[] UserToCategory;
+    }
 
+    void addEdge(int UserKey, int CategoryKey, double Weight) {
+        UserToCategory[UserKey - 1][userSize + CategoryKey - 1] = Weight;
+    }
+    
+    void getGraph(vecDouble2D& G) {
+        G.resize((userSize + categorySize) * (userSize + categorySize));
+        for (int i = 0; i < userSize + categorySize; i++) {
+            for (int j = 0; j < userSize + categorySize; j++) {
+                G[i].push_back(UserToCategory[i][j]);
+            }
+        }
+    }
+
+    void displayRelationGraph() {
+        for (int i = 0; i < userSize + categorySize; i++) {
+            for (int j = 0; j < userSize + categorySize; j++) {
+                cout << fixed << setprecision(0);
+                cout << UserToCategory[i][j] << " ";
+            }
+            cout << endl;
+        }
+    }
+
+};
 
 
 class admin
@@ -317,98 +415,74 @@ class admin
     string adminID, adminPass;
     User* user;
     vector <User> users;
-    vector <Category> categories;
+    vector <Category> categories;   
     vector <Product> products;
+    vecDouble2D UserToCategoryGraph;
+    
 
 public:
     admin() {
         adminID = "anas"; //can take user input to set(just saving time)
         adminPass = "anas123";
-        Category c;
-        c.key = 2;
-        Category b;
-        b.key = 1;
-        Category d;
-        d.key = 0;
-        categories.push_back(c);
-        categories.push_back(b);
-        categories.push_back(d);
 
-
-        //readUserToCategoryGraph();
-        readUserRecord();
         readCategoryRecord();
-        //readProductRecord();
+        readProductRecord();
+        readUserRecord();
+        readUserToCategoryGraph();
+        //userToCategory = new Graph(users.size(), categories.size());
+
     }
 
-    //void login(User* u) {
-    //    int check1, search1, getch();
+    void login(User* u) {
+        int check1, search1, getch();
 
-    //    system("cls");
-    //    SetColor(1);
-    //    cout << "Hello " << u->get_first_name() << "! Welcome to this Wonderful Platform\n\nThe Hunt Begins!\n" << endl;
-    //    SetColor(13);
-    //    do
-    //    {
-    //        if (u->get_type() == "user") {
-    //            cout << "1. Search For A Job\n\n2. View Hired/Applied to Jobs\n\n3. Subscribe to Premium*";
-    //        }
-    //        else {
-    //            cout << "1. Post A Job\n\n2. View Jobs Posted\n\n3. All Employees";
-    //        }
-    //        cout << "\n\n4. View Account Details\n\n5. Modify Acccount Details\n\n6. Logout\n" << endl;
-    //        cin >> search1;
+        system("cls");
+        SetColor(1);
+        cout << "Hello " << u->get_first_name() << "! Welcome to this Wonderful Platform\n\nThe Hunt Begins!\n" << endl;
+        SetColor(13);
+        do
+        {
+            cout << "1. Browse Products\n\n2. View Hired/Applied to Jobs";
+            cout << "\n\n4. View Account Details\n\n5. Modify Acccount Details\n\n6. Logout\n" << endl;
+            cin >> search1;
 
-    //        switch (search1)
-    //        {
-    //        case 1:
-    //            if (u->get_type() == "user") {
-    //                JobsSearch(u);
-    //            }
-    //            else {
-    //                if (employer* e = dynamic_cast<employer*>(u)) { //needed to call jobpost(), only present in child class(employer)
-    //                    e->JobPost();
-    //                }
-    //                else {
-    //                    cout << "Dynamic cast error"; getch();
-    //                }
-    //            }
-    //            break;
+            switch (search1)
+            {
+            case 1:
+                //JobsSearch(u);
+                break;
 
-    //        case 2:
-    //            viewJobs(u);
-    //            break;
+            case 2:
+                //viewJobs(u);
+                break;
 
 
-    //        case 3:
-    //            EmpSub(u);
-    //            break;
+            case 3:
+                //EmpSub(u);
+                break;
 
-    //        case 4:
-    //            u->display_details(u->get_type());
-    //            system("cls");
-    //            break;
+            case 4:
+                u->display_details();
+                system("cls");
+                break;
 
-    //        case 5:
-    //            u->modifyDetails();
+            case 5:
+                u->modifyDetails();
+                readUserRecord();
+                break;
 
-    //            readUserRecord();
-    //            readJobRecord();
-    //            readEmployerRecord();
-    //            break;
+            case 6:
+                SetColor(5); cout << "\n\t\t\t\t\tLogging out.."; Sleep(300); cout << "."; Sleep(500); SetColor(0);
+                break;
 
-    //        case 6:
-    //            SetColor(5); cout << "\n\t\t\t\t\tLogging out.."; Sleep(300); cout << "."; Sleep(500); SetColor(0);
-    //            break;
+            default:
+                cout << "Wrong Entry!"; Sleep(400);
+                system("cls");
+                break;
+            }
+        } while (search1 != 6);
 
-    //        default:
-    //            cout << "Wrong Entry!"; Sleep(400);
-    //            system("cls");
-    //            break;
-    //        }
-    //    } while (search1 != 6);
-
-    //}
+    }
     void readUserRecord() {
         vector<string> row;
 
@@ -425,9 +499,11 @@ public:
             }
 
             users.push_back(*new User(stoi(row[0]), row[1], row[2], row[3], row[4], stoi(row[5]), row[6], row[7], row[8]));
-            users.back().evaluatedCategory.resize(categories.size());
+            users.back().evaluatedCategory.resize(categories.size() + 1);
 
             for (int m = 9; m < row.size(); m++) {
+                if (row[m] == "")
+                    continue;
                 for (auto& category : categories) {
                     if (category.key == stoi(row[m])) {
                         users.back().evaluatedCategory[category.key] = true;
@@ -436,184 +512,101 @@ public:
                         if (!users.back().evaluatedCategory[category.key])
                             users.back().evaluatedCategory[category.key] = false;
                     }
-                    cout << users.back().evaluatedCategory[category.key];
+                }
+            }
+
+        }
+        
+
+        file.close();
+    }
+
+    void readCategoryRecord() {
+        vector<string> row;
+
+        string line, word;
+        fstream file("data\\categories.csv", ios::in);
+
+        getline(file, line);
+        while (getline(file, line)) {
+
+            row.clear();
+            istringstream ss(line);
+            while (getline(ss, word, ',')) {
+                row.push_back(word);
+            }
+
+            categories.push_back(*new Category(stoi(row[0]), row[1], row[2], row[3]));
+        }
+
+        file.close();
+    }
+    
+    void readProductRecord() {
+        vector<string> row;
+
+        string line, word;
+        fstream file("data\\products.csv", ios::in);
+
+        getline(file, line);
+        while (getline(file, line)) {
+
+            row.clear();
+            istringstream ss(line);
+            while (getline(ss, word, ',')) {
+                row.push_back(word);
+            }
+
+            products.push_back(*new Product(row[0], row[1], row[2], row[3], stod(row[4]), stoi(row[5]), stoi(row[6])));
+
+            for (auto& category : categories) { ///POSSIBLE HASHING
+                for (auto& productCategories : products.back().product_categoriesName) {
+                    if (productCategories == category.categoryName) {
+                        category.products.push_back(products.back());
+                    }
                 }
             }
         }
+
+        file.close();
     }
-    //void readEmployerRecord() {
-    //    vector<string> row;
 
-    //    string line, word;
+    
+    void readUserToCategoryGraph() {
+        vector<string> row;
+        Graph userToCategory(users.size(), categories.size());
+        string line, word;
+        fstream file("data\\user category training set.csv", ios::in);
 
-    //    int i = 0, n = 0;
-    //    employers.clear();
+        getline(file, line);
+        while (getline(file, line)) {
 
-    //    //counting number of records
-    //    fstream file("employer.csv", ios::in);
+            row.clear();
+            istringstream ss(line);
+            while (getline(ss, word, ',')) {
+                row.push_back(word);
+            }
 
-    //    getline(file, line);
-    //    while (getline(file, line)) {
-    //        n++;
-    //    }
+            userToCategory.addEdge(stoi(row[0]), stoi(row[1]), stod(row[2]));
+        }
 
-    //    file.close();
+        //userToCategory.displayRelationGraph();
+        userToCategory.getGraph(UserToCategoryGraph);
+        file.close();
 
-    //    employers.resize(n);
+    }
 
+    vecDouble2D getGraph() {
+        return UserToCategoryGraph;
+    }
 
-    //    //reading records
-    //    file.open("employer.csv", ios::in);
+    string get_username() {
+        return adminID;
+    }
 
-    //    getline(file, line);
-    //    while (getline(file, line)) {
-
-    //        row.clear();
-
-    //        istringstream ss(line);
-
-    //        while (getline(ss, word, ',')) {
-    //            row.push_back(word);
-    //        }
-
-    //        employers[i].set_idPass(row[0], row[1]);
-    //        employers[i].set_company_name(row[2]);
-    //        employers[i].set_email(row[3]);
-    //        employers[i].set_phone_number(row[4]);
-    //        employers[i].set_city(row[5]);
-    //        employers[i].set_department(row[6]);
-    //        employers[i].set_sub_depart(row[7]);
-
-    //        for (int m = 8; m < row.size(); m++) {//finding jobs that match particular employer and adding in its object
-    //            for (auto& Job : Jobs) {
-    //                if (Job.JobID == stoi(row[m])) {
-    //                    employers[i].Jobs[m - 8] = &Job;
-    //                    employers[i].addJobEmployees(&Job);
-    //                }
-    //            }
-    //        }
-
-    //        i++;
-
-    //    }
-    //}
-    //void readJobRecord() {
-    //    vector<string> row;
-
-    //    string line, word;
-
-    //    int i = 0, n = 0;
-    //    Jobs.clear();
-
-    //    //counting number of records
-    //    fstream file("Jobs.csv", ios::in);
-
-    //    getline(file, line);
-    //    while (getline(file, line)) {
-    //        n++;
-    //    }
-
-    //    file.close();
-
-    //    Jobs.resize(n);
-
-
-    //    //reading records
-    //    file.open("Jobs.csv", ios::in);
-
-    //    getline(file, line);
-    //    while (getline(file, line)) {
-
-    //        row.clear();
-
-    //        istringstream ss(line);
-
-    //        while (getline(ss, word, ',')) {
-
-    //            row.push_back(word);
-
-    //        }
-
-    //        Jobs[i].setJobID(stoi(row[0]));
-    //        Jobs[i].setTitle(row[1]);
-    //        Jobs[i].setDec(row[2]);
-    //        Jobs[i].setExp(stoi(row[3]));
-    //        Jobs[i].setMinMax(stoi(row[4]), stoi(row[5]));
-    //        Jobs[i].setOpenings(stoi(row[6]));
-
-    //        for (int m = 0, n = 7; n < 12; n += 2, m++) {
-    //            if (row[n] != "") {
-    //                Jobs[i].set_skill(row[n], row[n + 1], m);
-    //            }
-    //        }
-
-    //        for (int n = 17; n < 23; n++) {
-    //            if (row[n] != "") {
-    //                Jobs[i].responsibilities[n - 17] = row[n];
-    //                Jobs[i].num_res++;
-    //            }
-    //        }
-
-    //        int pos1 = line.find("[");
-    //        int pos2 = line.find("]");
-    //        string hiredStr = line.substr(pos1 + 1, pos2 - pos1 - 1);
-    //        istringstream ss2(hiredStr);
-
-    //        while (getline(ss2, hiredStr, ',')) {
-    //            for (auto& user : users) {
-    //                if (user.get_username() == hiredStr) {
-    //                    Jobs[i].addHired(user);
-    //                }
-    //            }
-    //        }
-
-    //        int pos3 = line.find("^", pos2);
-    //        string AppStr = line.substr(pos2 + 2, pos3 - pos2 - 2);
-    //        istringstream ss3(AppStr);
-
-    //        while (getline(ss3, AppStr, ',')) {
-    //            for (auto& user : users) {
-    //                if (user.get_username() == AppStr) {
-    //                    Jobs[i].addApplicant(user);
-    //                }
-    //            }
-    //        }
-
-    //        pos3 = line.find_last_of("^");
-    //        int pos4 = line.find_last_of("~");
-    //        string IntStr = line.substr(pos3 + 2, pos4 - pos3 - 3);
-    //        istringstream ss4(IntStr);
-
-
-    //        while (getline(ss4, IntStr, ',')) {
-    //            for (auto& user : users) {
-    //                if (user.get_username() == IntStr) {
-    //                    Jobs[i].addInterviewee(user);
-    //                }
-    //            }
-    //        }
-
-    //        pos4 = line.find_last_of("~");
-    //        int pos5 = line.find_last_of("|");
-    //        string ScrStr = line.substr(pos4 + 2, pos5 - pos4 - 3);
-    //        istringstream ss5(ScrStr);
-
-
-    //        while (getline(ss5, ScrStr, ',')) {
-    //            for (auto& user : users) {
-    //                if (user.get_username() == ScrStr) {
-    //                    Jobs[i].addScreeners(user);
-    //                }
-    //            }
-    //        }
-
-
-
-    //        i++;
-
-    //    }
-    //}
-    //void readUserToCategoryGraph(){}
+    string get_password() {
+        return adminPass;
+    }
 
     vector<User> get_users()
     {

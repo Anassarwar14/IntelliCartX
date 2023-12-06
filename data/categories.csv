@@ -1,29 +1,29 @@
 Key,Category Name,Description,Keywords,Feature Vector,,,,
-1,All Beauty,Explore a wide range of beauty products and cosmetics.,beauty|cosmetics|skincare|haircare|fragrance,0.1,0.5,0.2,0.8,0.3
-2,Appliances,Find the latest home appliances for a convenient lifestyle.,appliances|kitchen|home|electronics,0.2,0.6,0.1,0.7,0.4
-3,Arts Crafts and Sewing,Discover crafting supplies and sewing essentials.,crafting|sewing|art|DIY,0.3,0.7,0.5,0.2,0.9
-4,Automotive,Shop for automotive parts; accessories; and tools.,automotive|car parts|tools|accessories,0.4,0.8,0.3,0.6,0.1
-5,Books,Browse through a vast collection of books in various genres.,books|literature|reading|novels,0.5,0.9,0.4,0.5,0.2
-6,CDs and Vinyl,Explore a diverse selection of music on CDs and vinyl records.,music|CDs|vinyl|records,0.6,0.1,0.9,0.4,0.7
-7,Cell Phones and Accessories,Get the latest cell phones and accessories.,cell phones|accessories|electronics,0.7,0.2,0.8,0.3,0.8
-8,Clothing Shoes and Jewelry,Stay in style with trendy clothing; shoes; and jewelry.,clothing|shoes|jewelry|fashion,0.8,0.3,0.7,0.2,0.9
-9,Digital Music,Download and enjoy a wide range of digital music.,digital music|downloads|MP3,0.9,0.4,0.6,0.1,0.2
-10,Electronics,Discover the latest electronic gadgets and devices.,electronics|gadgets|devices|technology,0.2,0.5,0.1,0.6,0.3
-11,Gift Cards,Give the perfect gift with a variety of gift cards.,gift cards|gifting|presents,0.3,0.6,0.2,0.7,0.4
-12,Grocery and Gourmet Food,Shop for groceries and gourmet food items.,groceries|gourmet food|food items,0.4,0.7,0.3,0.8,0.5
-13,Home and Kitchen,Find home and kitchen essentials for a comfortable living space.,home essentials|kitchen products|comfort,0.5,0.8,0.4,0.9,0.6
-14,Industrial and Scientific,Explore industrial and scientific products for various applications.,industrial|scientific|products|applications,0.6,0.9,0.5,0.2,0.7
-15,Kindle Store,Access a vast library of e-books and Kindle editions.,Kindle|books|e-books|reading,0.7,0.1,0.6,0.3,0.8
-16,Luxury Beauty,Indulge in luxury beauty products for a pampering experience.,luxury beauty|pampering|skincare,0.8,0.2,0.7,0.4,0.9
-17,Magazine Subscriptions,Subscribe to your favorite magazines for regular updates.,magazines|subscriptions|reading,0.9,0.3,0.8,0.5,0.1
-18,Movies and TV,Enjoy a wide range of movies and TV shows.,movies|TV shows|entertainment,0.1,0.4,0.9,0.6,0.2
-19,Musical Instruments,Find musical instruments for enthusiasts and professionals.,musical instruments|music|enthusiasts,0.2,0.5,0.1,0.7,0.3
-20,Office Products,Equip your office with essential office supplies and products.,office supplies|products|workplace,0.3,0.6,0.2,0.8,0.4
-21,Patio Lawn and Garden,Enhance your outdoor space with patio; lawn; and garden products.,patio|lawn|garden|outdoor,0.4,0.7,0.3,0.9,0.5
-22,Pet Supplies,Shop for pet supplies and essentials for your furry friends.,pet supplies|essentials|pets,0.5,0.8,0.4,0.2,0.6
-23,Prime Pantry,Conveniently order pantry essentials with Prime Pantry.,pantry essentials|Prime Pantry|convenience,0.6,0.9,0.5,0.3,0.7
-24,Software,Explore a variety of software solutions for different needs.,software|solutions|technology,0.7,0.1,0.6,0.4,0.8
-25,Sports and Outdoors,Find sports gear and outdoor equipment for an active lifestyle.,sports gear|outdoor equipment|active lifestyle,0.8,0.2,0.7,0.5,0.9
-26,Tools and Home Improvement,Get tools and products for home improvement projects.,tools|home improvement|projects,0.9,0.3,0.8,0.6,0.1
-27,Toys and Games,Discover a world of toys and games for all ages.,toys|games|entertainment,0.1,0.4,0.9,0.7,0.2
-28,Video Games,Explore the latest video games for various gaming platforms.,video games|gaming|latest releases,0.2,0.5,0.1,0.8,0.3
+1,Sports & Outdoors,Products for outdoor activities and sports.,Outdoor Gear| Sporting Goods| Recreation| Skateboarding| Longboards| Scooters,0.1,0.5,0.2,0.8,0.3
+2,Outdoor Recreation,Equipment and gear for outdoor leisure and sports.,Camping| Hiking| Biking| Outdoor Adventures| Recreation,0.2,0.6,0.1,0.7,0.4
+3,Clothing; Shoes & Jewelry,Fashion items; footwear; and accessories for all ages.,Apparel|Footwear|Jewelry| Accessories| Fashion,0.3,0.7,0.5,0.2,0.9
+4,Furniture,Various types of furniture for home and office.,Home Furniture|Office Furniture|Decor|Seating,0.4,0.8,0.3,0.6,0.1
+5,Standard Skateboards & Longboards,Specific types of skateboards for different purposes.,Traditional Skateboards| Cruisers| Longboards,0.5,0.9,0.4,0.5,0.2
+6,Longboards,Extra-long skateboards for cruising and downhill riding.,Downhill Longboards| Freeride Boards,0.6,0.1,0.9,0.4,0.7
+7,Toys & Games,Play items for entertainment and education.,Educational Toys| Board Games| Craft Kits| Puzzles,0.7,0.2,0.8,0.3,0.8
+8,Learning & Education,Products designed to enhance learning experiences.,Educational Tools| STEM Kits| Learning Games,0.8,0.3,0.7,0.2,0.9
+9,Science Kits & Toys,Educational toys and kits related to science.,Chemistry Sets| Microscopes| Educational Science Toys,0.9,0.4,0.6,0.1,0.2
+10,Arts & Crafts,Materials and supplies for creative projects.,Craft Supplies| DIY Kits| Art Materials,0.2,0.5,0.1,0.6,0.3
+11,Craft Kits,Kits containing materials and instructions for crafting.,DIY Craft Kits| Art and Craft Sets,0.3,0.6,0.2,0.7,0.4
+12,Hobbies,Activities pursued for relaxation and enjoyment.,Collectibles| Model Building| Hobbyist Gear,0.4,0.7,0.3,0.8,0.5
+13,Models & Model Kits,Kits for building miniature models of various subjects.,Scale Models| Miniature Replicas| Model Building Kits,0.5,0.8,0.4,0.9,0.6
+14,Airplane & Jet Kits,Kits specifically for building model airplanes and jets.,Model Airplanes| Jet Replicas| Aircraft Model Kits,0.6,0.9,0.5,0.2,0.7
+15,Puzzles,Games or toys that require problem-solving skills.,Jigsaw Puzzles| Brain Teasers| Puzzle Games,0.7,0.1,0.6,0.3,0.8
+16,Party Supplies,Everything you need to celebrate and decorate.,Decorations|Tableware| Banners|Party Favors,0.8,0.2,0.7,0.4,0.9
+17,Costumes & Accessories,Apparel and items used for dressing up and costumes.,Costume Accessories| Dress-Up Gear,0.9,0.3,0.8,0.5,0.1
+18,Kids & Baby,Products designed for children and infants.,Children's Products| Baby Gear| Kids' Items,0.1,0.4,0.9,0.6,0.2
+19,Girls Costumes,Costumes designed specifically for girls.,Girls' Dress-Up| Princess Costumes,0.2,0.5,0.1,0.7,0.3
+20,Drawing & Painting Supplies,Materials for drawing and painting activities.,Art Supplies| Drawing Tools| Painting Materials,0.3,0.6,0.2,0.8,0.4
+21,Crayons,Coloring tools in stick form| often made of wax.,Coloring Crayons| Wax Colors| Drawing Tools,0.4,0.7,0.3,0.9,0.5
+22,Home & Kitchen,Products for household use and kitchen items.,Home Decor| Kitchen Essentials| Household Products,0.5,0.8,0.4,0.2,0.6
+23,Home Décor,Items used to decorate and enhance the home.,Decorative Items| Interior Design| Home Accessories,0.6,0.9,0.5,0.3,0.7
+24,Window Treatments,Coverings for windows| including curtains and blinds.,Curtains| Blinds| Window Coverings,0.7,0.1,0.6,0.4,0.8
+25,Window Stickers & Films,Decorative stickers and films designed for windows.,Window Decals| Privacy Films| Decorative Window Stickers,0.8,0.2,0.7,0.5,0.9
+26,Window Films,Films applied to windows for various purposes.,Privacy Films| Decorative Window Films,0.9,0.3,0.8,0.6,0.1
+27,Baby & Toddler Toys,Toys specifically designed for babies and toddlers.,Infant Toys| Toddler Playthings| Baby Entertainment,0.1,0.4,0.9,0.7,0.2
+28,Women,Fashion and accessories tailored for women of all ages.,Apparel|Footwear|Accessories| Women's Fashion,0.2,0.5,0.1,0.8,0.3

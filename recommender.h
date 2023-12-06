@@ -1,7 +1,7 @@
 #pragma once
 #include <iomanip>
 #include "user.h"
-#define vecDouble2D vector<vector<double>>
+
 
 using namespace std;
 
@@ -25,6 +25,7 @@ class PriorityQueue {
 
     void heapifyDown() {
         int size = heap.size();
+        int index = 0;
         while (index < size) {
             int leftChild = 2 * index + 1;
             int rightChild = 2 * index + 2;
@@ -85,6 +86,49 @@ public:
 
 
 
+void frame() {
+    system("cls");
+    int i, j, k;
+
+    SetColor(8);
+    for (i = 0; i < 25; i++) {
+        for (j = 5; j < 90; j++) {
+            gotoxy(j, i);
+            cout << " ";
+
+            if (j == 5 || j == 90 - 1) {
+                gotoxy(j, i);
+                cout << "!";
+            }
+
+
+            if (i == 0 || i == 25 - 1) {
+                gotoxy(j, i);
+                cout << "~";
+            }
+        }
+    }
+    gotoxy(15, 3);
+    SetColor(0);//default color
+}
+
+
+void intro() {
+
+    system("Color E7");
+    frame();
+    gotoxy(32, 6);
+    SetColor(5);
+    cout << "+++++WELCOME TO JOBAL+++++";
+    SetColor(1);
+    cout << "\n\n\n\n\t\t\t   Ready to hunt for high paying Jobs ? \n\n\t\t\t\tYou are at the right place!" << endl;
+    SetColor(8);
+    cout << "\n\n\n\t\t\t\tPress any key to continue";
+
+    int getch();
+    system("cls");
+    //frame();
+}
 
 class RecommenderSystem {
     vector<double> average;
@@ -188,7 +232,7 @@ public:
                         if (trainData && train_userToCat[j][i]) {
                             SquareError += pow(train_userToCat[j][i] - pred_rating, 2);
                             validCount++;
-                            users[j].evaluatedCategory[c1] = true;
+                            //users[j].evaluatedCategory[c1] = true;
                         }
                         userToCategory[j][i] = pred_rating;
                     }
@@ -283,7 +327,7 @@ public:
                         if (trainData && train_userToCat[i][j]) {
                             SquareError += pow(train_userToCat[i][j] - (pred_rating + average[i]), 2);
                             validCount++;
-                            users[i].evaluatedCategory[n] = true;
+                            users[i].evaluatedCategory[n] = true; //THIS IF TRAINING IS DONE ONCE OVERALL BEFORE TESTING 
                         }
 
                         userToCategory[i][j] = pred_rating;
@@ -349,7 +393,7 @@ public:
                 //display
                 i++;
             }
-            recommendations[i].products[rand() % recommendations[i].products.size() - 1];
+           // recommendations[i].products[rand() % recommendations[i].products.size() - 1];
         }
     }
 
