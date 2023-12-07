@@ -12,6 +12,12 @@
 
 using namespace std;
 
+class admin;
+class Category;
+class shopping_cart;
+class favourite;
+class item;
+class User;
 
 void SetColor(int ForgC)
 {
@@ -48,6 +54,7 @@ class User {
 
 public:
     vector<bool> evaluatedCategory;
+  //favourite fav;
 
     User(int key_, string uname, string passw, string fname, string lname, int age_, string email_, string phone, string city_) {
         key = key_;
@@ -327,8 +334,6 @@ public:
 
 };
 
-
-
 struct Product {
     string productID; //can use int for hashing
     string name, brand, category;
@@ -348,8 +353,10 @@ struct Product {
         }
     }
 
+    Product(){}
 
-    void displayProduct() {
+
+    Product displayProduct() {
         system("cls");
         string Title = name;
         transform(Title.begin(), Title.end(), Title.begin(), ::toupper);
@@ -372,13 +379,290 @@ struct Product {
 
         int choice = toupper(_getch());
         if (choice == 'A') {
-            add_item(*this);
+            return *this;
         }
+        /*else if (choice == 'F') {
+            return (*this);
+        }*/
 
-        //recommender update
+        return Product();
     }
 
 };
+
+
+unsigned int djb2_hash(string key, int table_size) {
+    unsigned int hash = 5381;
+
+    for (int i = 0; i < key.length(); ++i) {
+        char c = key[i];
+        hash = ((hash << 5) + hash) + c;
+    }
+
+    return hash % table_size;
+}
+
+class item {
+    Product p;
+
+public:
+    item* next;
+
+    item(Product pp) : p(pp), next(nullptr) {}
+
+    Product get_prod() const {
+        return p;
+    }
+};
+
+
+
+/// <summary>
+class favourite {
+private:
+    item** head;
+    int N;
+
+public:
+    favourite() : N(100) {
+        head = new item * [N];
+        for (int i = 0; i < N; i++) {
+            head[i] = nullptr;
+        }
+    }
+
+    void display_fav() {
+        bool empty = true;
+        cout << endl;
+        for (int i = 0; i < N; i++) {
+            item* curr = head[i];
+            while (curr != nullptr) {
+                empty = false;
+                cout << "Name: " << curr->get_prod().name << "  Price: " << curr->get_prod().price << endl;
+                curr = curr->next;
+            }
+        }
+        if (empty) {
+            cout << "Cart empty" << endl;
+        }
+
+        cout << "\n-------------------------\n" << endl;
+    }
+    void add_item_to_fav(Product p) {
+        int index = djb2_hash(p.productID, 100);
+        cout << "Index: " << index << endl;
+
+        item* temp = new item(p);
+        if (head[index] == nullptr) {
+            head[index] = temp;
+        }
+        else {
+            item* current = head[index];
+            while (current->next != nullptr) {
+                current = current->next;
+            }
+            current->next = temp;
+        }
+    }
+
+    void delete_item_from_fav(Product p1) {
+        int index = djb2_hash(p1.productID, 100);
+        item* current = head[index];
+
+        if (current == nullptr) {
+            cout << "Product not in cart" << endl;
+            return;
+        }
+
+        if (current->get_prod().productID == p1.productID) {
+            head[index] = current->next;
+            delete current;
+            cout << "\nProduct deleted\n";
+            return;
+        }
+
+        while (current->next != nullptr && current->next->get_prod().productID != p1.productID) {
+            current = current->next;
+        }
+
+        if (current->next != nullptr) {
+            item* temp = current->next;
+            current->next = current->next->next;
+            delete temp;
+            cout << "\nProduct deleted\n";
+        }
+        else {
+            cout << "Product not in cart" << endl;
+        }
+    }
+};
+/// </summary>
+class shopping_cart {
+private:
+    item** head;
+    int N;
+
+public:
+   
+    shopping_cart() : N(100) {
+        head = new item * [N];
+        for (int i = 0; i < N; i++) {
+            head[i] = nullptr;
+        }
+    }
+    void display_cart() {
+        bool empty = true;
+        int sum = 0;
+        cout << endl;
+        for (int i = 0; i < N; i++) {
+            item* curr = head[i];
+            while (curr != nullptr) {
+                empty = false;
+                cout << "Name: " << curr->get_prod().name << "  Price: " << curr->get_prod().price << endl;
+                sum += curr->get_prod().price;
+                curr = curr->next;
+            }
+        }
+        if (!empty) {
+            cout << "Total Cost: " << sum << endl;
+        }
+        else
+        {
+            cout << "Cart Empty!" << endl;
+        }
+
+        cout << "\n-------------------------\n" << endl;
+    }
+    void display_cart_filter_category(Product p)
+    {
+        bool empty = true;
+        string category = p.category;
+        for (int i = 0; i < N; i++)
+        {
+            item* curr = head[i];
+            while (curr != NULL)
+            {
+                empty = false;
+                if (curr->get_prod().category == p.category)
+                {
+                    cout << "Name: " << curr->get_prod().name << "  Price: " << curr->get_prod().price << endl;
+                }
+
+                curr = curr->next;
+            }
+        }
+        if (empty)
+        {
+            cout << "Cart Empty!" << endl;
+        }
+        cout << "\n-------------------------\n" << endl;
+    }
+    void display_cart_filter_price(int pricee) {
+        bool empty = true;
+        cout << endl;
+        for (int i = 0; i < N; i++) {
+            item* curr = head[i];
+            while (curr != nullptr) {
+                empty = false;
+                if (curr->get_prod().price <= pricee)
+                    cout << "Name: " << curr->get_prod().name << "  Price: " << curr->get_prod().price << endl;
+                curr = curr->next;
+            }
+        }
+        if (empty) {
+            cout << "Cart empty" << endl;
+        }
+
+        cout << "\n-------------------------\n" << endl;
+    }
+
+    void add_item(Product p) {
+        int index = djb2_hash(p.productID, 100);
+        cout << "Index: " << index << endl;
+
+        item* temp = new item(p);
+        if (head[index] == nullptr) {
+            head[index] = temp;
+        }
+        else {
+            item* current = head[index];
+            while (current->next != nullptr) {
+                current = current->next;
+            }
+            current->next = temp;
+        }
+    }
+
+    void delete_item(Product p1) {
+        int index = djb2_hash(p1.productID, 100);
+        item* current = head[index];
+
+        if (current == nullptr) {
+            cout << "Product not in cart" << endl;
+            return;
+        }
+
+        if (current->get_prod().productID == p1.productID) {
+            head[index] = current->next;
+            delete current;
+            cout << "\nProduct deleted\n";
+            return;
+        }
+
+        while (current->next != nullptr && current->next->get_prod().productID != p1.productID) {
+            current = current->next;
+        }
+
+        if (current->next != nullptr) {
+            item* temp = current->next;
+            current->next = current->next->next;
+            delete temp;
+            cout << "\nProduct deleted\n";
+        }
+        else {
+            cout << "Product not in cart" << endl;
+        }
+    }
+
+};
+bool check_string(const string& a, const string& b) {
+    string lowerA = a;
+    string lowerB = b;
+    transform(lowerA.begin(), lowerA.end(), lowerA.begin(), ::tolower);
+    transform(lowerB.begin(), lowerB.end(), lowerB.begin(), ::tolower);
+
+    size_t pos = lowerA.find(lowerB);
+    return pos != string::npos;
+}
+
+
+vector<Product> search(const string& srch, const vector<Product>& p) {
+
+    vector<Product> searchedProducts;
+    for (const auto& prod : p) {
+        if (check_string(prod.name, srch)) {
+            searchedProducts.push_back(prod);
+
+        }
+    }
+    return searchedProducts;
+}
+
+void display_filtered_products(vector<Product> p) {
+    for (size_t i = 0; i < p.size(); i++) {
+        cout << i + 1 << ".  " << p[i].name << endl;
+    }
+    cout << "Enter index number:" << endl;
+    int x;
+    cin >> x;
+    if (x >= 1 && x <= static_cast<int>(p.size())) {
+        p[x - 1].displayProduct();
+
+    }
+    else {
+        cout << "Invalid index number." << endl;
+    }
+}
 
 class Category {
 public:
@@ -455,12 +739,15 @@ class admin
     string adminID, adminPass;
     User* user;
     vector <User> users;
-    vector <Category> categories;   
+    vector <Category> categories;
     vector <Product> products;
     vecDouble2D UserToCategoryGraph;
     
+    
 
 public:
+    shopping_cart cart();
+    vector <Category> recommendations;
     admin() {
         adminID = "anas"; //can take user input to set(just saving time)
         adminPass = "anas123";
@@ -469,8 +756,6 @@ public:
         readProductRecord();
         readUserRecord();
         readUserToCategoryGraph();
-        //userToCategory = new Graph(users.size(), categories.size());
-
     }
 
     void displayAllProducts(User* u) {
@@ -616,19 +901,30 @@ public:
         for (auto& category : categories) {
             cout << category.key << " " << category.categoryName << endl;
         }
+        cout << endl;
+        int x;
+        cin >> x;
+
+        Product temp;
+        temp.category = categories[x].categoryName;
+        //cart.display_cart_filter_category(temp);
+
         _getch();
     }
 
-
-
-
-
-
-
+    void displayThroughCategory(Category c) {
+        for (int i = 0; i < 10; i++) {
+           c.products[rand() % 50].displayProduct();
+        }
+    }
 
 
     void login(User* u) {
         int check1, search1, getch();
+
+
+        vector<Product> prods;
+        string x;
 
         system("cls");
         SetColor(1);
@@ -637,7 +933,7 @@ public:
         do
         {
             cout << "1. View Account Details\n\n2. Modify Acccount Details\n\n3. Browse Products ";
-            cout << "\n\n4. Browse Categories \n\n5. Get Recommended Products\n\n6. View Cart\n\n7. View Favourites\n\n8. Logout" << endl;
+            cout << "\n\n4. Browse Categories \n\n5. Search Products\n\n6. Get Recommended Products\n\n7. View Cart\n\n8. View Favourites\n\n9. Logout" << endl;
             cin >> search1;
 
             switch (search1)
@@ -664,18 +960,28 @@ public:
                 system("cls");
                 break;
 
-            case 5:
-              
-                break;
 
+            case 5:
+                system("cls");
+                cin >> x;
+                prods = search(x, products);
+                display_filtered_products(prods);
+                break;
             case 6:
-                
+                for (auto& recom : recommendations) {
+                    displayThroughCategory(recom);
+                }
+                break;
 
             case 7:
-
-                break;
+         //       cart
 
             case 8:
+                //u->fav.display_fav();
+                
+                break;
+
+            case 9:
                 system("cls");
                 SetColor(5); cout << "\n\t\t\t\t\tLogging out.."; Sleep(300); cout << "."; Sleep(500); SetColor(0);
                 break;
@@ -688,54 +994,6 @@ public:
         } while (search1 != 6);
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     void readUserRecord() {
         vector<string> row;
@@ -865,6 +1123,11 @@ public:
     vector<User> get_users()
     {
         return users;
+    }
+
+    vector<Category> get_categories() 
+    {
+        return categories;
     }
 
 };

@@ -2,32 +2,23 @@
 
 using namespace std;
 
-
-//ISSSUES!!!
-//1. Sparsity problem(graph) e.g 1 category interacted
-//2. Zero vector after norm of data (no recommendation for that user) 
-
-
-
 int main()
 {
 
     admin a;
 	vector<User> users;
+	vector<Category> categories;
 	users = a.get_users();
+	categories = a.get_categories();
     vecDouble2D userToCategory_trainSet = a.getGraph();
     vecDouble2D userToCategory_testSet  = a.getGraph();
 
 
 
-  // RecommenderSystem testRecommender(userToCategory_trainSet, users, categories, true);
-  // RecommenderSystem Recommender(userToCategory_testSet, users, categories, false);
+   RecommenderSystem testRecommender(userToCategory_trainSet, users, categories, true);
+   RecommenderSystem Recommender(userToCategory_testSet, users, categories, false);
 
-   //Recommender.displayRelationGraph();
-
-
-
-
+  
    int choice, check1 = 0, i = 0, check2 = 0, count = 0, userSize = 0,  incUsername = 0;
    User u;
    string user_name, password;
@@ -83,6 +74,7 @@ int main()
 
 						   if (users[i].get_password() == password)
 						   {
+							   a.recommendations = Recommender.computeTopKRecommendations(&users[i]);
 							   a.login(&users[i]);
 							   break; //count =3;
 						   }
@@ -196,8 +188,7 @@ int main()
 1. browse products -> 1) view -> 1) buy now
                                  2) add to cart
                                  3) favorites
-                                 4) rate product
-                                 5) back
+
                       2) search -> view -> 1) buy now
                                            2).. 
                                            ..

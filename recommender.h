@@ -344,7 +344,7 @@ public:
         }
     }
 
-    void computeTopKRecommendations(User* u) {
+    vector<Category> computeTopKRecommendations(User* u) {
         vector<double> arr;
         for (int j = userSize; j < userToCategory[0].size(); j++) {
             arr.push_back(userToCategory[u->getKey()][j]);
@@ -357,7 +357,7 @@ public:
             if (userToCategory[u->getKey()][j] == largest_K_Vals[k] && largest_K_Vals[k] > threshold)
                 recommendations.push_back(categories[k]);
         }
-        displayRecommendations(recommendations);
+        return recommendations;
     }
 
     vector<double> findTopK(const vector<double>& arr, int k) {
@@ -392,7 +392,7 @@ public:
                 //display
                 i++;
             }
-           // recommendations[i].products[rand() % recommendations[i].products.size() - 1];
+            recommendations[i].products[rand() % recommendations[i].products.size() - 1];
         }
     }
 
