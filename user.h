@@ -359,13 +359,23 @@ struct Product {
         
         SetColor(8); cout << "\n\n\t\tBrand:  \n\t\t "; SetColor(9); cout << brand; 
 
-        SetColor(8); cout << "\n\n\tOverall Rating: \n\t\t " << overall_rating; SetColor(9);
+        SetColor(8); cout << "\n\n\t\tOverall Rating: \n\t\t ";  SetColor(4); cout << overall_rating; SetColor(9);
 
         SetColor(8); cout << "\n\n\n\t\t\033[4mCategories in: \033[24m: "; SetColor(9);
         SetColor(13); cout << categoryBuffer << "\t";
         SetColor(8); cout << "\033[4mPrice\033[24m: ";
         SetColor(2); cout << "$" << price << endl << endl;
-        _getch();
+
+        cout << endl << endl;
+        SetColor(10); cout << "\n\n\n\t\t\t\t\t>> [A]dd to Cart <<";  SetColor(6);  cout << "    |    "; SetColor(12); cout << "[C]ancel"; SetColor(7);
+        cout << "\n\t\t\t\t\t  _____________\t\t   ______"; SetColor(5);
+
+        int choice = toupper(_getch());
+        if (choice == 'A') {
+            add_item(*this);
+        }
+
+        //recommender update
     }
 
 };
@@ -591,7 +601,7 @@ public:
 
                 a--;
                 products[a].displayProduct();
-
+                
                 x = 5; y = 6; m = 0; i = -1; j = -1; choice = 'B';
                 system("cls");
 
@@ -602,7 +612,12 @@ public:
 
     }
 
-
+    void displayAllCategories() {
+        for (auto& category : categories) {
+            cout << category.key << " " << category.categoryName << endl;
+        }
+        _getch();
+    }
 
 
 
@@ -644,8 +659,9 @@ public:
                 break;
 
             case 4:
-                
-                
+                system("cls");
+                displayAllCategories();
+                system("cls");
                 break;
 
             case 5:
