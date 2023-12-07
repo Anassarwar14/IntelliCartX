@@ -119,15 +119,14 @@ void intro() {
     frame();
     gotoxy(32, 6);
     SetColor(5);
-    cout << "+++++WELCOME TO JOBAL+++++";
+    cout << "+++++WELCOME TO IntelliCartX+++++";
     SetColor(1);
-    cout << "\n\n\n\n\t\t\t   Ready to hunt for high paying Jobs ? \n\n\t\t\t\tYou are at the right place!" << endl;
+    cout << "\n\n\n\n\t\t\t   Ready to hunt for high quality products ? \n\n\t\t\t\tYou are at the right place!" << endl;
     SetColor(8);
     cout << "\n\n\n\t\t\t\tPress any key to continue";
 
-    int getch();
+    _getch();
     system("cls");
-    //frame();
 }
 
 class RecommenderSystem {

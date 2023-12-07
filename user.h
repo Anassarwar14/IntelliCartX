@@ -6,6 +6,8 @@
 #include <regex>
 #include <string>
 #include <windows.h>
+#include <conio.h> 
+#include <stdlib.h>
 #define vecDouble2D vector<vector<double>>
 
 using namespace std;
@@ -32,6 +34,12 @@ void gotoxy(short x, short y) {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
+void cursorBack() {
+    for (int i = 0; i < 21; i++) {
+        cout << "\b \b";
+    }
+    cout << "\x1b[1A\t\t   \b\b";
+}
 
 class User {
     string first_name, last_name;
@@ -328,6 +336,7 @@ struct Product {
     int stock, overall_rating;
     string categoryBuffer;
     vector<string> product_categoriesName;
+
     Product(string key, string n, string b, string c, double p, int st, int r) : productID(key), name(n), brand(b), categoryBuffer(c),
         price(p), stock(st), overall_rating(r) {
         istringstream ss(categoryBuffer);
@@ -338,6 +347,27 @@ struct Product {
             i++;
         }
     }
+
+
+    void displayProduct() {
+        system("cls");
+        string Title = name;
+        transform(Title.begin(), Title.end(), Title.begin(), ::toupper);
+
+        SetColor(13); cout << "\n\n\t\t\t\t  -----" << Title << "-----"; SetColor(8);
+        cout << "\n\n\t\tProductID: \n\t\t  "; SetColor(9); cout << productID;
+        
+        SetColor(8); cout << "\n\n\t\tBrand:  \n\t\t "; SetColor(9); cout << brand; 
+
+        SetColor(8); cout << "\n\n\tOverall Rating: \n\t\t " << overall_rating; SetColor(9);
+
+        SetColor(8); cout << "\n\n\n\t\t\033[4mCategories in: \033[24m: "; SetColor(9);
+        SetColor(13); cout << categoryBuffer << "\t";
+        SetColor(8); cout << "\033[4mPrice\033[24m: ";
+        SetColor(2); cout << "$" << price << endl << endl;
+        _getch();
+    }
+
 };
 
 class Category {
@@ -433,6 +463,155 @@ public:
 
     }
 
+    void displayAllProducts(User* u) {
+        system("cls");
+        int m = 0, x = 5, y = 6, a = 0;
+        int n = 0;
+        char choice = 'A';
+
+        for (int i = 0, j = 0; j < products.size(); i++, j++) {
+
+            gotoxy(x, y);
+            SetColor(8); cout << "   --------Product#" << ++m << "--------";
+
+            gotoxy(x, ++y);
+            string e;
+            string r;
+            if (products[i].name.length() > 21) {
+                e = products[i].name.substr(0, 21);
+                SetColor(1); cout << "|>" << e << ".." << "<|";
+            }
+            else {
+                SetColor(1); cout << "|>" << products[i].name << "<|";
+            }
+
+            gotoxy(x, ++y);
+            SetColor(6); cout << "[" << products[i].brand << "]"; SetColor(8);
+
+            gotoxy(x, ++y);
+            if (products[i].categoryBuffer.length() > 21) {
+                e = products[i].categoryBuffer.substr(0, 21);
+                SetColor(6); cout << e << ".."; SetColor(8);
+            }
+            else {
+                SetColor(6); cout << "Categories: " << products[i].categoryBuffer; SetColor(8);
+            }
+
+            gotoxy(x, ++y);
+            cout << "Price: "; SetColor(2);  cout << "$" << products[i].price;  SetColor(8);
+
+            gotoxy(x, ++y);
+            cout << "Rating: "; SetColor(4); cout << products[i].overall_rating; SetColor(8);
+
+            gotoxy(x, ++y);
+            cout << "Stock: "; SetColor(3); cout << products[i].stock; SetColor(8);
+            y = 6;
+            x += 50;
+
+
+            SetColor(7);
+            gotoxy(2, 16);
+            for (int k = 0; k < 29; k++) {
+                cout << "____";
+            }
+            SetColor(3); gotoxy(3, 18); cout << "<[P:Prev\t\t\t\t\t\tS:Select\t\t\t\t\t     More:M]>";
+            SetColor(11); gotoxy(1, 28); cout << "Press 'E' to exit"; SetColor(5);
+
+
+
+            //cases for moving accross pages
+            if (j == products.size() - 1 && m % 3 != 0) {
+                x = 5, y = 6;
+                do {
+                    choice = toupper(_getch());
+                    if (choice == 'P' && m > 3 && (m - 2) % 3 == 0) {
+                        m -= 5;
+                        j -= 5;//although m and i j have 1 unit dist diff i j gets ++ once the cycle repeats
+                        i -= 5;//in the case of showall
+                        system("cls");
+                        break;
+                    }
+                    else if (choice == 'P' && m > 3 && (m - 1) % 3 == 0) {
+                        m -= 4;
+                        j -= 4;
+                        i -= 4;
+                        system("cls");
+                        break;
+                    }
+                } while (choice != 'S' && choice != 'E');
+
+            }
+            else if (j != products.size() - 1 && m % 3 == 0) {
+                x = 5, y = 6;
+                do {
+                    choice = toupper(_getch());
+                    if (choice == 'P' && m > 3) {
+                        m -= 6;
+                        j -= 6;
+                        i -= 6;
+                        system("cls");
+                        break;
+                    }
+
+                    if (choice == 'M') { system("cls"); }
+                } while (choice != 'M' && choice != 'S' && choice != 'E');
+
+            }
+            else if (j == products.size() - 1 && m <= 3) {
+                do {
+                    choice = toupper(_getch());
+                } while (choice != 'S' && choice != 'E');
+            }
+            else if (j == products.size() - 1 && m % 3 == 0) {
+                x = 5, y = 6;
+                do {
+                    choice = toupper(_getch());
+                    if (choice == 'P' && m > 3) {
+                        m -= 6;
+                        j -= 6;
+                        i -= 6;
+                        system("cls");
+                        break;
+                    }
+                } while (choice != 'S' && choice != 'E');
+            }
+
+
+            if (choice == 'S') {
+                gotoxy(1, 23); cout << "Enter Product-Num#: ";
+                do {
+                    cin >> a;
+
+                    if (a > m || a < 0) {
+                        cout << "Unavailable Re-enter!"; Sleep(500);
+                        cursorBack();
+                    }
+                } while (a > m || a < 0);
+
+
+                a--;
+                products[a].displayProduct();
+
+                x = 5; y = 6; m = 0; i = -1; j = -1; choice = 'B';
+                system("cls");
+
+            }
+            else if (choice == 'E') { system("cls"); break; }
+
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
     void login(User* u) {
         int check1, search1, getch();
 
@@ -442,36 +621,46 @@ public:
         SetColor(13);
         do
         {
-            cout << "1. Browse Products\n\n2. View Hired/Applied to Jobs";
-            cout << "\n\n4. View Account Details\n\n5. Modify Acccount Details\n\n6. Logout\n" << endl;
+            cout << "1. View Account Details\n\n2. Modify Acccount Details\n\n3. Browse Products ";
+            cout << "\n\n4. Browse Categories \n\n5. Get Recommended Products\n\n6. View Cart\n\n7. View Favourites\n\n8. Logout" << endl;
             cin >> search1;
 
             switch (search1)
             {
             case 1:
-                //JobsSearch(u);
+                system("cls");
+                u->display_details();
                 break;
 
             case 2:
-                //viewJobs(u);
-                break;
-
-
-            case 3:
-                //EmpSub(u);
-                break;
-
-            case 4:
-                u->display_details();
                 system("cls");
-                break;
-
-            case 5:
                 u->modifyDetails();
                 readUserRecord();
                 break;
 
+
+            case 3:
+                displayAllProducts(u);
+                break;
+
+            case 4:
+                
+                
+                break;
+
+            case 5:
+              
+                break;
+
             case 6:
+                
+
+            case 7:
+
+                break;
+
+            case 8:
+                system("cls");
                 SetColor(5); cout << "\n\t\t\t\t\tLogging out.."; Sleep(300); cout << "."; Sleep(500); SetColor(0);
                 break;
 
@@ -483,6 +672,55 @@ public:
         } while (search1 != 6);
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     void readUserRecord() {
         vector<string> row;
 

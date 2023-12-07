@@ -28,7 +28,7 @@ int main()
 
 
 
-   int choice, check1 = 0, i = 0, check2 = 0, count = 0, userSize = 0,  incUsername = 0, getch();
+   int choice, check1 = 0, i = 0, check2 = 0, count = 0, userSize = 0,  incUsername = 0;
    User u;
    string user_name, password;
    char _end = 'e';
@@ -50,7 +50,7 @@ int main()
 	   case 1:
 		   SetColor(1); cout << "-->Enter User details<--\n" << endl; SetColor(4);
 		   u.user_setter();
-		  // getch();
+		   _getch();
 
 		   break;
 
@@ -101,7 +101,7 @@ int main()
 
 			   if (incUsername == 1) {
 				   gotoxy(9, 18); SetColor(4);  cout << "Incorrect Username! Press any key to continue\n\n\n\t ";
-			//	   SetColor(8); cout << "Press 'B' to return"; _end = toupper((int)getch());
+				   SetColor(8); cout << "Press 'B' to return"; _end = toupper(_getch());
 			   }
 
 		   } while (_end != 'B' && incUsername == 1);
@@ -149,7 +149,7 @@ int main()
 
 			   if (incUsername == 1) {
 				   gotoxy(9, 18); SetColor(4);  cout << "Incorrect Username! Press any key to continue\n\n\n\t ";
-				   //SetColor(8); cout << "Press 'B' to return"; _end = toupper((int) getch());
+				   SetColor(8); cout << "Press 'B' to return"; _end = toupper(_getch());
 			   }
 
 		   } while (_end != 'B' && incUsername == 1);
@@ -163,7 +163,7 @@ int main()
 		   frame();
 		   SetColor(4);
 		   cout << "Invalid entry! Press any key to continue" << endl;
-		   //getch();
+		   _getch();
 		   break;
 
 	   }
@@ -222,7 +222,7 @@ int main()
                                filter
                                reload
 
-4. view cart -> 1) remove from cart
+4. view cart -> 1) remove from cart 
                 2) checkout
 
 5. view favorites -> 1) product1 -> 1) buy now
