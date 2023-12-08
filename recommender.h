@@ -344,6 +344,8 @@ public:
         }
     }
 
+    //Using Priority Queue:      in O(nlogk)
+    //While      Introsort: does in O(nlogn)
     vector<Category> computeTopKRecommendations(User* u) {
         vector<double> arr;
         for (int j = userSize; j < userToCategory[0].size(); j++) {

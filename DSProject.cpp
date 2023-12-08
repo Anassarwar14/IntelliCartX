@@ -159,7 +159,7 @@ int main()
 		   break;
 
 	   }
-   } while (choice != 6);
+   } while (choice != 4);
 
 
 }
@@ -228,10 +228,6 @@ vector<vector<double>> userCategoryRel =>      u1  u2 c1 c2 c3
                                            c1  {0, 0, 0, 0, 1},   
                                            c2  {0, 0, 0, 0, 0},
                                            c3  {0, 0, 1, 0, 0}.
-
-Graph type: Mixed Bipartite graph [directed-undirected weighted(multi edge)]
-Traversal: BFS (breadth first search) using queue
-
 
 };
 */
